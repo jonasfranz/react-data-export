@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {saveAs} from "file-saver";
-import XLSX from "tempa-xlsx";
+import { saveAs } from "file-saver";
+import * as XLSX from 'xlsx';
 
 import ExcelSheet from "../elements/ExcelSheet";
-import {strToArrBuffer, excelSheetFromAoA, excelSheetFromDataSet} from "../utils/DataUtil";
+import { strToArrBuffer, excelSheetFromAoA, excelSheetFromDataSet } from "../utils/DataUtil";
 
 class ExcelFile extends React.Component {
     fileExtensions = ['xlsx', 'xls', 'csv', 'txt', 'html'];
@@ -79,9 +79,9 @@ class ExcelFile extends React.Component {
 
         const fileExtension = this.getFileExtension();
         const fileName = this.getFileName();
-        const wbout = XLSX.write(wb, {bookType: fileExtension, bookSST: true, type: 'binary'});
+        const wbout = XLSX.write(wb, { bookType: fileExtension, bookSST: true, type: 'binary' });
 
-        saveAs(new Blob([strToArrBuffer(wbout)], {type: "application/octet-stream"}), fileName);
+        saveAs(new Blob([strToArrBuffer(wbout)], { type: "application/octet-stream" }), fileName);
     }
 
     getFileName() {
@@ -121,7 +121,7 @@ class ExcelFile extends React.Component {
         } else {
             return (<span onClick={this.handleDownload}>{element}</span>);
         }
-        
+
     }
 }
 

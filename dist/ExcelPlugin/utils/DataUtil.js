@@ -7,17 +7,17 @@ exports.excelSheetFromDataSet = exports.excelSheetFromAoA = exports.dateToNumber
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _tempaXlsx = require('tempa-xlsx');
+var _xlsx = require('xlsx');
 
-var _tempaXlsx2 = _interopRequireDefault(_tempaXlsx);
+var XLSX = _interopRequireWildcard(_xlsx);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var strToArrBuffer = function strToArrBuffer(s) {
     var buf = new ArrayBuffer(s.length);
     var view = new Uint8Array(buf);
 
-    for (var i = 0; i != s.length; ++i) {
+    for (var i = 0; i !== s.length; ++i) {
         view[i] = s.charCodeAt(i) & 0xFF;
     }
 
@@ -67,7 +67,7 @@ var excelSheetFromDataSet = function excelSheetFromDataSet(dataSet) {
         var columnsWidth = [];
         if (columns.length >= 0) {
             columns.forEach(function (col, index) {
-                var cellRef = _tempaXlsx2.default.utils.encode_cell({ c: xSteps + index, r: rowCount });
+                var cellRef = XLSX.utils.encode_cell({ c: xSteps + index, r: rowCount });
                 fixRange(range, 0, 0, rowCount, xSteps, ySteps);
                 var colTitle = col;
                 if ((typeof col === 'undefined' ? 'undefined' : _typeof(col)) === 'object') {
@@ -84,9 +84,9 @@ var excelSheetFromDataSet = function excelSheetFromDataSet(dataSet) {
             ws['!cols'] = columnsWidth;
         }
 
-        for (var R = 0; R != data.length; ++R, rowCount++) {
-            for (var C = 0; C != data[R].length; ++C) {
-                var cellRef = _tempaXlsx2.default.utils.encode_cell({ c: C + xSteps, r: rowCount });
+        for (var R = 0; R !== data.length; ++R, rowCount++) {
+            for (var C = 0; C !== data[R].length; ++C) {
+                var cellRef = XLSX.utils.encode_cell({ c: C + xSteps, r: rowCount });
                 fixRange(range, R, C, rowCount, xSteps, ySteps);
                 getCell(data[R][C], cellRef, ws);
             }
@@ -94,7 +94,7 @@ var excelSheetFromDataSet = function excelSheetFromDataSet(dataSet) {
     });
 
     if (range.s.c < 10000000) {
-        ws['!ref'] = _tempaXlsx2.default.utils.encode_range(range);
+        ws['!ref'] = XLSX.utils.encode_range(range);
     }
 
     return ws;
@@ -129,7 +129,7 @@ function getCell(v, cellRef, ws) {
         cell.t = 'b';
     } else if (isDate) {
         cell.t = 'n';
-        cell.z = _tempaXlsx2.default.SSF._table[14];
+        cell.z = XLSX.SSF._table[14];
         cell.v = dateToNumber(cell.v);
     } else {
         cell.t = 's';
@@ -159,8 +159,8 @@ var excelSheetFromAoA = function excelSheetFromAoA(data) {
     var ws = {};
     var range = { s: { c: 10000000, r: 10000000 }, e: { c: 0, r: 0 } };
 
-    for (var R = 0; R != data.length; ++R) {
-        for (var C = 0; C != data[R].length; ++C) {
+    for (var R = 0; R !== data.length; ++R) {
+        for (var C = 0; C !== data[R].length; ++C) {
             if (range.s.r > R) {
                 range.s.r = R;
             }
@@ -182,14 +182,14 @@ var excelSheetFromAoA = function excelSheetFromAoA(data) {
                 continue;
             }
 
-            var cellRef = _tempaXlsx2.default.utils.encode_cell({ c: C, r: R });
+            var cellRef = XLSX.utils.encode_cell({ c: C, r: R });
             if (typeof cell.v === 'number') {
                 cell.t = 'n';
             } else if (typeof cell.v === 'boolean') {
                 cell.t = 'b';
             } else if (cell.v instanceof Date) {
                 cell.t = 'n';
-                cell.z = _tempaXlsx2.default.SSF._table[14];
+                cell.z = XLSX.SSF._table[14];
                 cell.v = dateToNumber(cell.v);
             } else {
                 cell.t = 's';
@@ -200,7 +200,7 @@ var excelSheetFromAoA = function excelSheetFromAoA(data) {
     }
 
     if (range.s.c < 10000000) {
-        ws['!ref'] = _tempaXlsx2.default.utils.encode_range(range);
+        ws['!ref'] = XLSX.utils.encode_range(range);
     }
 
     return ws;

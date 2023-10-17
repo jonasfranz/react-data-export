@@ -16,15 +16,17 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _fileSaver = require("file-saver");
 
-var _tempaXlsx = require("tempa-xlsx");
+var _xlsx = require("xlsx");
 
-var _tempaXlsx2 = _interopRequireDefault(_tempaXlsx);
+var XLSX = _interopRequireWildcard(_xlsx);
 
 var _ExcelSheet = require("../elements/ExcelSheet");
 
 var _ExcelSheet2 = _interopRequireDefault(_ExcelSheet);
 
 var _DataUtil = require("../utils/DataUtil");
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -101,7 +103,7 @@ var ExcelFile = function (_React$Component) {
 
             var fileExtension = this.getFileExtension();
             var fileName = this.getFileName();
-            var wbout = _tempaXlsx2.default.write(wb, { bookType: fileExtension, bookSST: true, type: 'binary' });
+            var wbout = XLSX.write(wb, { bookType: fileExtension, bookSST: true, type: 'binary' });
 
             (0, _fileSaver.saveAs)(new Blob([(0, _DataUtil.strToArrBuffer)(wbout)], { type: "application/octet-stream" }), fileName);
         }
